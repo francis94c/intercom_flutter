@@ -146,5 +146,31 @@ void main() {
     testWidgets('fetchLoggedInUserAttributes', (WidgetTester _) async {
       expect(plugin.fetchLoggedInUserAttributes(), completes);
     });
+
+    testWidgets('setUserJwt', (WidgetTester _) async {
+      expect(plugin.setUserJwt('test'), completes);
+    });
+
+    testWidgets('setAuthTokens', (WidgetTester _) async {
+      expect(plugin.setAuthTokens({'security_token': 'test'}), completes);
+    });
+
+    group('setThemeMode', () {
+      testWidgets('dark', (WidgetTester _) async {
+        expect(plugin.setThemeMode(IntercomTheme.dark), completes);
+      });
+
+      testWidgets('light', (WidgetTester _) async {
+        expect(plugin.setThemeMode(IntercomTheme.light), completes);
+      });
+
+      testWidgets('system', (WidgetTester _) async {
+        expect(plugin.setThemeMode(IntercomTheme.system), completes);
+      });
+
+      testWidgets('none', (WidgetTester _) async {
+        expect(plugin.setThemeMode(IntercomTheme.none), completes);
+      });
+    });
   });
 }

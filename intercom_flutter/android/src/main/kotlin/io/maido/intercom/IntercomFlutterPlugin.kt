@@ -12,6 +12,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.intercom.android.sdk.*
 import io.intercom.android.sdk.identity.Registration
 import io.intercom.android.sdk.push.IntercomPushClient
+import io.intercom.android.sdk.ui.theme.ThemeMode
 
 class IntercomFlutterPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler, ActivityAware {
   companion object {
@@ -269,6 +270,53 @@ class IntercomFlutterPlugin : FlutterPlugin, MethodCallHandler, EventChannel.Str
         }
         result.success(map)
       }
+      "setUserJwt" -> {
+        val jwt = call.argument<String>("jwt")
+        if (jwt != null) {
+          Intercom.client().setUserJwt(jwt)
+          result.success("Jwt added")
+        }
+      }
+      "setAuthTokens" -> {
+        val tokens = call.argument<Map<String, String>>("tokens")
+        if (!tokens.isNullOrEmpty()) {
+          val tokenList: List<AuthToken> = tokens.map { (key, value) ->
+            AuthToken(key, value)
+          }
+          Intercom.client().setAuthTokens(tokenList, intercomStatusCallback = object : IntercomStatusCallback {
+            override fun onFailure(intercomError: IntercomError) {
+              // Handle failure
+              result.error(intercomError.errorCode.toString(), intercomError.errorMessage, getIntercomError(
+                errorCode = intercomError.errorCode,
+                errorMessage = intercomError.errorMessage,
+              ))
+            }
+
+            override fun onSuccess() {
+              // Handle success
+              result.success("Auth tokens added")
+            }
+          })
+        }
+      }
+      "setThemeMode" -> {
+        val theme = call.argument<String>("theme")
+        when (theme) {
+            "dark" -> {
+              Intercom.client().setThemeMode(ThemeMode.DARK)
+            }
+            "light" -> {
+              Intercom.client().setThemeMode(ThemeMode.LIGHT)
+            }
+            "system" -> {
+              Intercom.client().setThemeMode(ThemeMode.SYSTEM)
+            }
+            else -> {
+              Intercom.client().setThemeMode(null)
+            }
+        }
+        result.success("Theme overridden")
+      }
       else -> result.notImplemented()
     }
   }
@@ -337,10 +385,14 @@ class IntercomFlutterPlugin : FlutterPlugin, MethodCallHandler, EventChannel.Str
   }
 
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-    unreadConversationCountListener = UnreadConversationCountListener { count -> events?.success(count) }
-        .also {
-          Intercom.client().addUnreadConversationCountListener(it)
+    unreadConversationCountListener = UnreadConversationCountListener { count ->
+        val handler = android.os.Handler(android.os.Looper.getMainLooper())
+        handler.post {
+          events?.success(count)
         }
+      }.also {
+        Intercom.client().addUnreadConversationCountListener(it)
+      }
   }
 
   override fun onCancel(arguments: Any?) {

@@ -2,12 +2,13 @@ library intercom_flutter;
 
 import 'dart:async';
 
+import 'package:intercom_flutter_platform_interface/enumeral.dart';
 import 'package:intercom_flutter_platform_interface/intercom_flutter_platform_interface.dart';
 import 'package:intercom_flutter_platform_interface/intercom_status_callback.dart';
 
 /// export the [IntercomVisibility] enum
-export 'package:intercom_flutter_platform_interface/intercom_flutter_platform_interface.dart'
-    show IntercomVisibility;
+export 'package:intercom_flutter_platform_interface/enumeral.dart'
+    show IntercomVisibility, IntercomTheme;
 export 'package:intercom_flutter_platform_interface/intercom_status_callback.dart'
     show IntercomStatusCallback, IntercomError;
 
@@ -213,6 +214,8 @@ class Intercom {
   /// such as the URI in your message or the conversation to open.
   ///
   /// When you want Intercom to act on that data, use this method.
+  @Deprecated(
+      "Calling this API is no longer required. Intercom will directly open the chat screen when a push notification is clicked.")
   Future<void> handlePushMessage() {
     return IntercomFlutterPlatform.instance.handlePushMessage();
   }
@@ -286,5 +289,28 @@ class Intercom {
   /// Retrieve the details of the currently logged in user.
   Future<Map<String, dynamic>> fetchLoggedInUserAttributes() {
     return IntercomFlutterPlatform.instance.fetchLoggedInUserAttributes();
+  }
+
+  /// JWT (JSON Web Token) is the recommended method to secure your Messenger.
+  /// With JWT, you can ensure that bad actors can't impersonate your users,
+  /// see their conversation history, or make unauthorized updates to data.
+  Future<void> setUserJwt(String jwt) {
+    return IntercomFlutterPlatform.instance.setUserJwt(jwt);
+  }
+
+  /// Set up the authentication (user-defined token) to secure your Data
+  /// connectors. These tokens can be used for functionality such as Fin Actions.
+  ///  You can provide multiple tokens at once. Please ensure you have created
+  ///  the correct keys [here](https://www.intercom.com/a/apps/_/settings/app-settings/authentication)
+  Future<void> setAuthTokens(Map<String, String> tokens) {
+    return IntercomFlutterPlatform.instance.setAuthTokens(tokens);
+  }
+
+  /// The theme mode controls whether the SDK displays in light mode, dark mode,
+  /// or follows the system theme.
+  /// The theme selection will be reset when the app restarts i.e. You can
+  /// override the server-provided theme setting for the current session only.
+  Future<void> setThemeMode(IntercomTheme theme) {
+    return IntercomFlutterPlatform.instance.setThemeMode(theme);
   }
 }

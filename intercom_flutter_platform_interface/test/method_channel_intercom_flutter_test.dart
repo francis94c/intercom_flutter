@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intercom_flutter_platform_interface/enumeral.dart';
 import 'package:intercom_flutter_platform_interface/intercom_flutter_platform_interface.dart';
 import 'package:intercom_flutter_platform_interface/method_channel_intercom_flutter.dart';
 import 'package:mockito/mockito.dart';
@@ -454,6 +455,80 @@ void main() {
         log,
         <Matcher>[isMethodCall('fetchLoggedInUserAttributes', arguments: null)],
       );
+    });
+
+    test('setUserJwt', () async {
+      await intercom.setUserJwt('test');
+      expect(
+        log,
+        <Matcher>[
+          isMethodCall('setUserJwt', arguments: {
+            'jwt': 'test',
+          })
+        ],
+      );
+    });
+
+    test('setAuthTokens', () async {
+      await intercom.setAuthTokens({'security_token': 'test'});
+      expect(
+        log,
+        <Matcher>[
+          isMethodCall('setAuthTokens', arguments: {
+            'tokens': {'security_token': 'test'},
+          })
+        ],
+      );
+    });
+
+    group('setThemeMode', () {
+      test('dark', () async {
+        await intercom.setThemeMode(IntercomTheme.dark);
+        expect(
+          log,
+          <Matcher>[
+            isMethodCall('setThemeMode', arguments: {
+              'theme': 'dark',
+            })
+          ],
+        );
+      });
+
+      test('light', () async {
+        await intercom.setThemeMode(IntercomTheme.light);
+        expect(
+          log,
+          <Matcher>[
+            isMethodCall('setThemeMode', arguments: {
+              'theme': 'light',
+            })
+          ],
+        );
+      });
+
+      test('system', () async {
+        await intercom.setThemeMode(IntercomTheme.system);
+        expect(
+          log,
+          <Matcher>[
+            isMethodCall('setThemeMode', arguments: {
+              'theme': 'system',
+            })
+          ],
+        );
+      });
+
+      test('none', () async {
+        await intercom.setThemeMode(IntercomTheme.none);
+        expect(
+          log,
+          <Matcher>[
+            isMethodCall('setThemeMode', arguments: {
+              'theme': 'none',
+            })
+          ],
+        );
+      });
     });
   });
 }

@@ -1,8 +1,7 @@
+import 'package:intercom_flutter_platform_interface/enumeral.dart';
 import 'package:intercom_flutter_platform_interface/intercom_status_callback.dart';
 import 'package:intercom_flutter_platform_interface/method_channel_intercom_flutter.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-
-enum IntercomVisibility { gone, visible }
 
 abstract class IntercomFlutterPlatform extends PlatformInterface {
   IntercomFlutterPlatform() : super(token: _token);
@@ -194,6 +193,8 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
   /// such as the URI in your message or the conversation to open.
   ///
   /// When you want Intercom to act on that data, use this method.
+  @Deprecated(
+      "Calling this API is no longer required. Intercom will directly open the chat screen when a push notification is clicked.")
   Future<void> handlePushMessage() {
     throw UnimplementedError('handlePushMessage() has not been implemented.');
   }
@@ -277,5 +278,28 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
   Future<Map<String, dynamic>> fetchLoggedInUserAttributes() {
     throw UnimplementedError(
         'fetchLoggedInUserAttributes() has not been implemented.');
+  }
+
+  /// JWT (JSON Web Token) is the recommended method to secure your Messenger.
+  /// With JWT, you can ensure that bad actors can't impersonate your users,
+  /// see their conversation history, or make unauthorized updates to data.
+  Future<void> setUserJwt(String jwt) {
+    throw UnimplementedError('setUserJwt() has not been implemented.');
+  }
+
+  /// Set up the authentication (user-defined token) to secure your Data
+  /// connectors. These tokens can be used for functionality such as Fin Actions.
+  /// You can provide multiple tokens at once. Please ensure you have created
+  /// the correct keys [here](https://www.intercom.com/a/apps/_/settings/app-settings/authentication)
+  Future<void> setAuthTokens(Map<String, String> tokens) {
+    throw UnimplementedError('setAuthTokens() has not been implemented.');
+  }
+
+  /// The theme mode controls whether the SDK displays in light mode, dark mode,
+  /// or follows the system theme.
+  /// The theme selection will be reset when the app restarts i.e. You can
+  /// override the server-provided theme setting for the current session only.
+  Future<void> setThemeMode(IntercomTheme theme) {
+    throw UnimplementedError('setThemeMode() has not been implemented.');
   }
 }
