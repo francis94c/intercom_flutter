@@ -21,11 +21,14 @@ But you can pre-define some Intercom settings, if you want (optional), such as `
 - unreadConversationCount
 - setInAppMessagesVisibility
 - sendTokenToIntercom
-- handlePushMessage
 - isIntercomPush
 - handlePush
 - displayCarousel
 - displayHelpCenterCollections
+- getWindowDidHideStream
+- suppressProactiveContent
+- setUserJwtProvider
+- removeUserJwtProvider
 
 [1]: ../intercom_flutter
 

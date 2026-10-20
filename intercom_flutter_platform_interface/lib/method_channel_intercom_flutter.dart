@@ -5,9 +5,49 @@ import 'package:intercom_flutter_platform_interface/intercom_status_callback.dar
 
 const MethodChannel _channel = MethodChannel('maido.io/intercom');
 const EventChannel _unreadChannel = EventChannel('maido.io/intercom/unread');
+const EventChannel _windowDidHideChannel =
+    EventChannel('maido.io/intercom/windowDidHide');
 
 /// An implementation of [IntercomFlutterPlatform] that uses method channels.
 class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
+  static UserJwtProvider? _userJwtProvider;
+  static bool _isMethodCallHandlerSet = false;
+
+  /// Registers the single handler for calls from native code on [_channel].
+  ///
+  /// A channel holds only one handler, so every inbound method must be
+  /// dispatched from [_handleMethodCall] and registered only through here.
+  static void _ensureMethodCallHandler() {
+    if (_isMethodCallHandlerSet) return;
+    _channel.setMethodCallHandler(_handleMethodCall);
+    _isMethodCallHandlerSet = true;
+  }
+
+  static Future<dynamic> _handleMethodCall(MethodCall call) async {
+    switch (call.method) {
+      case 'provideUserJwt':
+        return _provideUserJwt();
+      default:
+        throw MissingPluginException();
+    }
+  }
+
+  static Future<String?> _provideUserJwt() async {
+    final provider = _userJwtProvider;
+    if (provider == null) {
+      return null;
+    }
+    try {
+      final jwt = await provider();
+      if (jwt == null || jwt.isEmpty) {
+        return null;
+      }
+      return jwt;
+    } catch (_) {
+      return null;
+    }
+  }
+
   @override
   Future<void> initialize(
     String appId, {
@@ -24,6 +64,11 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
   @override
   Stream<dynamic> getUnreadStream() {
     return _unreadChannel.receiveBroadcastStream();
+  }
+
+  @override
+  Stream<dynamic> getWindowDidHideStream() {
+    return _windowDidHideChannel.receiveBroadcastStream();
   }
 
   @override
@@ -175,13 +220,6 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
     await _channel.invokeMethod('sendTokenToIntercom', {'token': token});
   }
 
-  @Deprecated(
-      "Calling this API is no longer required. Intercom will directly open the chat screen when a push notification is clicked.")
-  @override
-  Future<void> handlePushMessage() async {
-    await _channel.invokeMethod('handlePushMessage');
-  }
-
   @override
   Future<void> displayMessageComposer(String message) async {
     await _channel.invokeMethod('displayMessageComposer', {'message': message});
@@ -262,6 +300,19 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
   }
 
   @override
+  Future<void> setUserJwtProvider(UserJwtProvider provider) async {
+    _userJwtProvider = provider;
+    _ensureMethodCallHandler();
+    await _channel.invokeMethod('setUserJwtProvider');
+  }
+
+  @override
+  Future<void> removeUserJwtProvider() async {
+    _userJwtProvider = null;
+    await _channel.invokeMethod('removeUserJwtProvider');
+  }
+
+  @override
   Future<void> setAuthTokens(Map<String, String> tokens) async {
     await _channel.invokeMethod('setAuthTokens', {'tokens': tokens});
   }
@@ -269,6 +320,14 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
   @override
   Future<void> setThemeMode(IntercomTheme theme) async {
     await _channel.invokeMethod('setThemeMode', {'theme': theme.name});
+  }
+
+  @override
+  Future<void> suppressProactiveContent(
+      List<IntercomProactiveContentType> types) async {
+    await _channel.invokeMethod('suppressProactiveContent', {
+      'types': types.map((type) => type.name).toList(),
+    });
   }
 
   /// Convert the [PlatformException] details to [IntercomError].

@@ -1,7 +1,8 @@
-#import "IntercomFlutterPlugin.h"
+#import "./include/intercom_flutter/IntercomFlutterPlugin.h"
 #import <Intercom/Intercom.h>
 
 id unread;
+id windowDidHide;
 
 @implementation UnreadStreamHandler
 - (FlutterError*)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)eventSink {
@@ -18,18 +19,42 @@ id unread;
 }
 @end
 
-@implementation IntercomFlutterPlugin
+@implementation WindowDidHideStreamHandler
+- (FlutterError*)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)eventSink {
+    windowDidHide = [[NSNotificationCenter defaultCenter] addObserverForName:IntercomWindowDidHideNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        eventSink(@(YES));
+    }];
+  return nil;
+}
+
+- (FlutterError*)onCancelWithArguments:(id)arguments {
+    [[NSNotificationCenter defaultCenter] removeObserver:windowDidHide];
+  return nil;
+}
+@end
+
+@implementation IntercomFlutterPlugin {
+    FlutterMethodChannel *_channel;
+}
+
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     IntercomFlutterPlugin* instance = [[IntercomFlutterPlugin alloc] init];
     FlutterMethodChannel* channel =
     [FlutterMethodChannel methodChannelWithName:@"maido.io/intercom"
                                 binaryMessenger:[registrar messenger]];
+    instance->_channel = channel;
     [registrar addMethodCallDelegate:instance channel:channel];
     FlutterEventChannel* unreadChannel = [FlutterEventChannel eventChannelWithName:@"maido.io/intercom/unread"
     binaryMessenger:[registrar messenger]];
     UnreadStreamHandler* unreadStreamHandler =
         [[UnreadStreamHandler alloc] init];
     [unreadChannel setStreamHandler:unreadStreamHandler];
+    
+    FlutterEventChannel* windowDidHideChannel = [FlutterEventChannel eventChannelWithName:@"maido.io/intercom/windowDidHide"
+    binaryMessenger:[registrar messenger]];
+    WindowDidHideStreamHandler* windowDidHideStreamHandler =
+        [[WindowDidHideStreamHandler alloc] init];
+    [windowDidHideChannel setStreamHandler:windowDidHideStreamHandler];
     
 }
 
@@ -170,9 +195,6 @@ id unread;
             result(@"Logged event");
         }
     }
-    else if([@"handlePushMessage" isEqualToString:call.method]) {
-        result(@"No op");
-    }
     else if([@"displayMessageComposer" isEqualToString:call.method]) {
         NSString *message = call.arguments[@"message"];
         [Intercom presentMessageComposer:message];
@@ -269,6 +291,31 @@ id unread;
         NSString *jwt = call.arguments[@"jwt"];
         [Intercom setUserJwt:jwt];
         result(@"Jwt added");
+    } else if([@"setUserJwtProvider" isEqualToString:call.method]) {
+        __weak FlutterMethodChannel *channel = _channel;
+        [Intercom setUserJwtProvider:^(void (^completion)(NSString * _Nullable jwt)) {
+            FlutterMethodChannel *strongChannel = channel;
+            if (strongChannel == nil) {
+                completion(nil);
+                return;
+            }
+            __block BOOL completed = NO;
+            [strongChannel invokeMethod:@"provideUserJwt" arguments:nil result:^(id result) {
+                if (completed) {
+                    return;
+                }
+                completed = YES;
+                if ([result isKindOfClass:[NSString class]] && [(NSString *)result length] > 0) {
+                    completion(result);
+                } else {
+                    completion(nil);
+                }
+            }];
+        }];
+        result(@"User JWT provider set");
+    } else if([@"removeUserJwtProvider" isEqualToString:call.method]) {
+        [Intercom removeUserJwtProvider];
+        result(@"User JWT provider removed");
     } else if([@"setAuthTokens" isEqualToString:call.method]) {
         NSDictionary *tokens = call.arguments[@"tokens"];
         if (tokens != nil && [tokens count] > 0) {
@@ -285,6 +332,20 @@ id unread;
                                            details: [self getIntercomError:errorCode:errorMsg]]);
             }];
         }
+    } else if([@"suppressProactiveContent" isEqualToString:call.method]) {
+        NSArray *types = call.arguments[@"types"];
+        NSMutableArray<NSNumber *> *contentTypes = [NSMutableArray array];
+        if(types != (id)[NSNull null] && types != nil) {
+            for (NSString *type in types) {
+                if([@"carousel" isEqualToString:type]) {
+                    [contentTypes addObject:@(IntercomProactiveContentTypeCarousel)];
+                } else if([@"survey" isEqualToString:type]) {
+                    [contentTypes addObject:@(IntercomProactiveContentTypeSurvey)];
+                }
+            }
+        }
+        [Intercom suppressProactiveContent:contentTypes];
+        result(@"Suppressed proactive content");
     } else if([@"setThemeMode" isEqualToString:call.method]) {
         NSString *theme = call.arguments[@"theme"];
         

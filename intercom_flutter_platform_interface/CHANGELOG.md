@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.0.9
+
+* Added methods `setUserJwtProvider` and `removeUserJwtProvider`.
+
+## 2.0.8
+
+* Added method `suppressProactiveContent`.
+
+## 2.0.7
+
+* Added method `getWindowDidHideStream`.
+* Removed deprecated `handlePushMessage`.
+
 ## 2.0.6
 
 * Added method `setThemeMode`.

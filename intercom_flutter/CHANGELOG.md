@@ -1,5 +1,218 @@
 # Changelog
 
+## 9.6.33
+
+* Bump Intercom iOS SDK version to [19.9.1](https://github.com/intercom/intercom-ios/releases/tag/19.9.1)
+
+## 9.6.32
+
+* Bump Intercom Android SDK version to [18.10.0](https://github.com/intercom/intercom-android/releases/tag/18.10.0)
+* Bump Intercom iOS SDK version to [19.9.0](https://github.com/intercom/intercom-ios/releases/tag/19.9.0)
+* Added API `setUserJwtProvider` so the SDK can request a fresh user JWT when the current one expires. Not supported on web.
+* Added API `removeUserJwtProvider`. Not supported on web.
+* Updated dependency `intercom_flutter_platform_interface: ^2.0.9`
+* Updated dependency `intercom_flutter_web: ^1.1.14`
+
+## 9.6.31
+
+* Bump Intercom Android SDK version to [18.9.6](https://github.com/intercom/intercom-android/releases/tag/18.9.6)
+* Bump Intercom iOS SDK version to [19.8.4](https://github.com/intercom/intercom-ios/releases/tag/19.8.4)
+
+## 9.6.30
+
+* Bump Intercom Android SDK version to [18.9.5](https://github.com/intercom/intercom-android/releases/tag/18.9.5)
+
+## 9.6.29
+
+* Bump Intercom iOS SDK version to [19.8.3](https://github.com/intercom/intercom-ios/releases/tag/19.8.3)
+
+## 9.6.28
+
+* Bump Intercom Android SDK version to [18.9.4](https://github.com/intercom/intercom-android/releases/tag/18.9.4)
+
+## 9.6.27
+
+* Bump Intercom iOS SDK version to [19.8.2](https://github.com/intercom/intercom-ios/releases/tag/19.8.2)
+
+## 9.6.26
+
+* Bump Intercom Android SDK version to [18.9.3](https://github.com/intercom/intercom-android/releases/tag/18.9.3)
+* Bump Intercom iOS SDK version to [19.8.1](https://github.com/intercom/intercom-ios/releases/tag/19.8.1)
+
+## 9.6.25
+
+* Android: apply the Kotlin Gradle Plugin only when AGP built-in Kotlin is not active.
+
+## 9.6.24
+
+* Bump Intercom Android SDK version to [18.9.1](https://github.com/intercom/intercom-android/releases/tag/18.9.1)
+
+## 9.6.23
+
+* Bump Intercom iOS SDK version to [19.8.0](https://github.com/intercom/intercom-ios/releases/tag/19.8.0)
+
+## 9.6.22
+
+* Bump Intercom Android SDK version to [18.9.0](https://github.com/intercom/intercom-android/releases/tag/18.9.0)
+
+## 9.6.21
+
+* Bump Intercom Android SDK version to [18.8.0](https://github.com/intercom/intercom-android/releases/tag/18.8.0)
+
+## 9.6.20
+
+* Bump Intercom Android SDK version to [18.7.0](https://github.com/intercom/intercom-android/releases/tag/18.7.0)
+* Bump Intercom iOS SDK version to [19.7.2](https://github.com/intercom/intercom-ios/releases/tag/19.7.2)
+
+## 9.6.19
+
+* Bump Intercom Android SDK version to [18.6.0](https://github.com/intercom/intercom-android/releases/tag/18.6.0)
+
+## 9.6.18
+
+* Bump Intercom iOS SDK version to [19.7.1](https://github.com/intercom/intercom-ios/releases/tag/19.7.1)
+
+## 9.6.17
+
+* Bump Intercom Android SDK version to [18.5.0](https://github.com/intercom/intercom-android/releases/tag/18.5.0)
+* Bump Intercom iOS SDK version to [19.7.0](https://github.com/intercom/intercom-ios/releases/tag/19.7.0)
+* Added API `suppressProactiveContent` to control which proactive content types (carousels, surveys) can be displayed. Not supported on web.
+* Updated dependency `intercom_flutter_platform_interface: ^2.0.8`
+* Updated dependency `intercom_flutter_web: ^1.1.13`
+
+## 9.6.16
+
+* Bump Intercom Android SDK version to [18.4.0](https://github.com/intercom/intercom-android/releases/tag/18.4.0)
+
+## 9.6.15
+
+* Bump Intercom iOS SDK version to [19.6.5](https://github.com/intercom/intercom-ios/releases/tag/19.6.5)
+
+## 9.6.14
+
+* Bump Intercom Android SDK version to [18.3.2](https://github.com/intercom/intercom-android/releases/tag/18.3.2)
+* Bump Intercom iOS SDK version to [19.6.4](https://github.com/intercom/intercom-ios/releases/tag/19.6.4)
+
+## 9.6.13
+
+* Bump Intercom Android SDK version to [18.3.1](https://github.com/intercom/intercom-android/releases/tag/18.3.1)
+
+## 9.6.12
+
+* Bump Intercom Android SDK version to [18.3.0](https://github.com/intercom/intercom-android/releases/tag/18.3.0)
+
+## 9.6.11
+
+* Bump Intercom iOS SDK version to [19.6.3](https://github.com/intercom/intercom-ios/releases/tag/19.6.3)
+
+## 9.6.10
+
+* Bump Intercom iOS SDK version to [19.6.2](https://github.com/intercom/intercom-ios/releases/tag/19.6.2)
+
+## 9.6.9
+
+* Bump Intercom iOS SDK version to [19.6.1](https://github.com/intercom/intercom-ios/releases/tag/19.6.1)
+
+## 9.6.8
+
+* Bump Intercom Android SDK version to [18.2.0](https://github.com/intercom/intercom-android/releases/tag/18.2.0)
+
+## 9.6.7
+
+* Bump Intercom iOS SDK version to [19.6.0](https://github.com/intercom/intercom-ios/releases/tag/19.6.0)
+
+## 9.6.6
+
+* Bump Intercom Android SDK version to [18.1.0](https://github.com/intercom/intercom-android/releases/tag/18.1.0)
+
+## 9.6.5
+
+* Bump Intercom Android SDK version to [18.0.3](https://github.com/intercom/intercom-android/releases/tag/18.0.3)
+
+## 9.6.4
+
+* Bump Intercom Android SDK version to [18.0.2](https://github.com/intercom/intercom-android/releases/tag/18.0.2)
+* Bump Intercom iOS SDK version to [19.5.7](https://github.com/intercom/intercom-ios/releases/tag/19.5.7)
+
+## 9.6.3
+
+* Bump Intercom Android SDK version to [18.0.1](https://github.com/intercom/intercom-android/releases/tag/18.0.1)
+
+## 9.6.2
+
+* Removed deprecated `handlePushMessage` API (removed from native Intercom SDK)
+* Added `getWindowDidHideStream` to listen for when the Intercom window is hidden (iOS only).
+
+## 9.6.1
+
+* Bump Intercom iOS SDK version to [19.5.6](https://github.com/intercom/intercom-ios/releases/tag/19.5.6)
+
+## 9.6.0
+
+* Bump Intercom Android SDK version to [18.0.0](https://github.com/intercom/intercom-android/releases/tag/18.0.0)
+* **BREAKING**: The minimum Android SDK `minSdk` version is now 23
+* **BREAKING**: The target/compile Android SDK version is now 36
+
+## 9.5.6
+
+* Bump Intercom iOS SDK version to [19.5.5](https://github.com/intercom/intercom-ios/releases/tag/19.5.5)
+
+## 9.5.5
+
+* Bump Intercom Android SDK version to [17.4.7](https://github.com/intercom/intercom-android/releases/tag/17.4.7)
+* Bump Intercom iOS SDK version to [19.5.4](https://github.com/intercom/intercom-ios/releases/tag/19.5.4)
+
+## 9.5.4
+
+* Bump Intercom iOS SDK version to [19.5.3](https://github.com/intercom/intercom-ios/releases/tag/19.5.3)
+
+## 9.5.3
+
+* Bump Intercom Android SDK version to [17.4.6](https://github.com/intercom/intercom-android/releases/tag/17.4.6)
+
+## 9.5.2
+
+* Bump Intercom Android SDK version to [17.4.5](https://github.com/intercom/intercom-android/releases/tag/17.4.5)
+
+## 9.5.1
+
+* Bump Intercom iOS SDK version to [19.5.2](https://github.com/intercom/intercom-ios/releases/tag/19.5.2)
+
+## 9.5.0
+
+* Swift Package Manager support
+
+## 9.4.27
+
+* Updated README
+
+## 9.4.26
+
+* Bump Intercom Android SDK version to [17.4.4](https://github.com/intercom/intercom-android/releases/tag/17.4.4)
+* Bump Intercom iOS SDK version to [19.5.1](https://github.com/intercom/intercom-ios/releases/tag/19.5.1)
+
+## 9.4.25
+
+* Bump Intercom Android SDK version to [17.4.3](https://github.com/intercom/intercom-android/releases/tag/17.4.3)
+* Bump Intercom iOS SDK version to [19.5.0](https://github.com/intercom/intercom-ios/releases/tag/19.5.0)
+
+## 9.4.24
+
+* Bump Intercom Android SDK version to [17.4.2](https://github.com/intercom/intercom-android/releases/tag/17.4.2)
+* Updated README
+
+## 9.4.23
+
+* Bump Intercom Android SDK version to [17.4.1](https://github.com/intercom/intercom-android/releases/tag/17.4.1)
+
+## 9.4.22
+
+* Bump Intercom Android SDK version to [17.4.0](https://github.com/intercom/intercom-android/releases/tag/17.4.0)
+
+## 9.4.21
+
+* Bump Intercom iOS SDK version to [19.4.1](https://github.com/intercom/intercom-ios/releases/tag/19.4.1)
+
 ## 9.4.20
 
 * Bump Intercom iOS SDK version to [19.4.0](https://github.com/intercom/intercom-ios/releases/tag/19.4.0)

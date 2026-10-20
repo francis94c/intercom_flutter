@@ -3,6 +3,11 @@ import 'package:intercom_flutter_platform_interface/intercom_status_callback.dar
 import 'package:intercom_flutter_platform_interface/method_channel_intercom_flutter.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+/// Supplies a fresh user JWT when the native SDK asks for one.
+///
+/// Return the new token, or `null` when one cannot be supplied.
+typedef UserJwtProvider = Future<String?> Function();
+
 abstract class IntercomFlutterPlatform extends PlatformInterface {
   IntercomFlutterPlatform() : super(token: _token);
 
@@ -44,6 +49,16 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
   /// You can listen for unread conversation count with this method.
   Stream<dynamic> getUnreadStream() {
     throw UnimplementedError('getUnreadStream() has not been implemented.');
+  }
+
+  /// You can listen for when the Intercom window is hidden.
+  ///
+  /// This stream emits when the Intercom window (messenger, help center, etc.) is closed.
+  /// This allows developers to perform certain actions in their app when the Intercom window is closed.
+  /// Only available on iOS.
+  Stream<dynamic> getWindowDidHideStream() {
+    throw UnimplementedError(
+        'getWindowDidHideStream() has not been implemented.');
   }
 
   /// To make sure that conversations between you and your users are kept private
@@ -189,16 +204,6 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
     throw UnimplementedError('sendTokenToIntercom() has not been implemented.');
   }
 
-  /// When a user taps on a push notification Intercom hold onto data
-  /// such as the URI in your message or the conversation to open.
-  ///
-  /// When you want Intercom to act on that data, use this method.
-  @Deprecated(
-      "Calling this API is no longer required. Intercom will directly open the chat screen when a push notification is clicked.")
-  Future<void> handlePushMessage() {
-    throw UnimplementedError('handlePushMessage() has not been implemented.');
-  }
-
   /// To open the Intercom messenger to the composer screen with [message]
   /// field pre-populated.
   Future<void> displayMessageComposer(String message) {
@@ -287,6 +292,36 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
     throw UnimplementedError('setUserJwt() has not been implemented.');
   }
 
+  /// Registers a callback that supplies a fresh user JWT when the current one
+  /// is about to expire or has been rejected.
+  ///
+  /// The native SDK calls [provider] and retries the failed request once with
+  /// the returned token. Return `null` when a token cannot be supplied.
+  /// An empty string or a thrown error is treated the same as `null`.
+  ///
+  /// Set the first token with [setUserJwt] before login. This callback only
+  /// supplies later tokens. Call [removeUserJwtProvider] to stop asking.
+  ///
+  /// On iOS and Android, the SDK stops waiting after 10 seconds. This plugin
+  /// does not add its own timeout.
+  ///
+  /// Note: this is not supported on web. Call [setUserJwt] again to refresh
+  /// the token there.
+  Future<void> setUserJwtProvider(UserJwtProvider provider) {
+    throw UnimplementedError('setUserJwtProvider() has not been implemented.');
+  }
+
+  /// Stops asking for fresh user JWTs.
+  ///
+  /// Requests rejected for an expired JWT fail until [setUserJwt] is called
+  /// with a new token.
+  ///
+  /// Note: this is not supported on web.
+  Future<void> removeUserJwtProvider() {
+    throw UnimplementedError(
+        'removeUserJwtProvider() has not been implemented.');
+  }
+
   /// Set up the authentication (user-defined token) to secure your Data
   /// connectors. These tokens can be used for functionality such as Fin Actions.
   /// You can provide multiple tokens at once. Please ensure you have created
@@ -301,5 +336,16 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
   /// override the server-provided theme setting for the current session only.
   Future<void> setThemeMode(IntercomTheme theme) {
     throw UnimplementedError('setThemeMode() has not been implemented.');
+  }
+
+  /// To suppress the given proactive content [types] (carousels, surveys)
+  /// from being displayed.
+  ///
+  /// All the proactive content types are visible by default.
+  /// Pass an empty list to unsuppress all.
+  Future<void> suppressProactiveContent(
+      List<IntercomProactiveContentType> types) {
+    throw UnimplementedError(
+        'suppressProactiveContent() has not been implemented.');
   }
 }

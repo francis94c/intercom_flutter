@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.1.14
+
+* Updated `intercom_flutter_platform_interface` to `^2.0.9`.
+
+## 1.1.13
+
+* Updated `intercom_flutter_platform_interface` to `^2.0.8`.
+
+## 1.1.12
+
+* Updated `intercom_flutter_platform_interface` to `^2.0.7`.
+* Removed deprecated `handlePushMessage`.
+
 ## 1.1.11
 
 * JSON-encode `intercomSettings` before injecting the Intercom script to avoid invalid JavaScript
